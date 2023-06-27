@@ -1,5 +1,6 @@
 import paramiko
 import os
+from sys import stderr
 
 def scp_transfer(source_path, destination_path, hostname, username, password=None, private_key=None):
     try:
@@ -8,7 +9,6 @@ def scp_transfer(source_path, destination_path, hostname, username, password=Non
         client.connect(hostname, username=username, password=password, key_filename=private_key)
 
         sftp = client.open_sftp()
-        print("Llegamos hasta aca.")
         sftp.put(source_path, destination_path)
 
         sftp.close()
@@ -17,5 +17,8 @@ def scp_transfer(source_path, destination_path, hostname, username, password=Non
         # Eliminamos el archivo local.
         if os.path.isfile(source_path):
             os.remove(source_path)
-    except:
+    except Exception as e:
+        # Print the error message to stderr
+        print("Error: " + str(e), file=stderr)
+        # Raise the exception to propagate it to the PowerShell script
         raise

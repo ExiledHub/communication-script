@@ -21,4 +21,9 @@ if __name__ == '__main__':
     password  = argv[5]
 
     for source_path in sources:
-        scp_transfer(source_path, destination_path, hostname, username, password)
+        filename = ''
+        try:
+            filename = source_path.split('\\')[-1]
+        except:
+            filename = source_path.split('/')[-1]
+        scp_transfer(source_path, f"{destination_path}/{filename}", hostname, username, password)
